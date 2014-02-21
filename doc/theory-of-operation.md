@@ -42,9 +42,9 @@ we are done. Otherwise:
 4. Generate an SSL certificate for the new virtual appliance.
 5. Communicate with NOVA to boot a virtual appliance image. In so doing the
 image should be booted setting the following parameters:
-	a. SSL server certificate and key appliance should use
-	b. SSL client certificate the controller will use to authenticate
-    c. (If debug) root SSH public key
+    1. SSL server certificate and key appliance should use
+    2. SSL client certificate the controller will use to authenticate
+    3. (If debug) root SSH public key
 6. Wait for the virtual appliance to boot, pinging the IP it will occupy (or
 timeout)
 7. Once appliance pings OK, keep hitting its status API until it returns OK
