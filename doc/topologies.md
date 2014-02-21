@@ -33,13 +33,13 @@ network
 will step in / take over if the active node fails.
 * Roles should be "sticky" (ie. role changes do not automatically fail-back.)
 * Ability to scale vertically by following this process:
-** Destroy standby node
-** Boot new, larger standby node
-** Make sure configs are synchronized between nodes
-** Flip-flop roles
-** Destroy old active node (now standby node)
-** Boot new, larger standby node
-** Make sure configs are synchronized between nodes
+* Destroy standby node
+    * Boot new, larger standby node
+    * Make sure configs are synchronized between nodes
+    * Flip-flop roles
+    * Destroy old active node (now standby node)
+    * Boot new, larger standby node
+    * Make sure configs are synchronized between nodes
 * Resilient to single point of failure
 
 ### Behavioral quirks
