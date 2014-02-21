@@ -97,9 +97,9 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
 ```
 * **Response:**
 ```
-cust44052_http_80_lbs6443                  OK
+7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c                OK
   haproxy          running (pid 27327)
-cust44052_https_443_lbs6443                OK
+635bbdc6-65cd-41fc-b879-22c02aaf8951                OK
   haproxy          running (pid 9862)
   stunnel          running (pid 9876)
 ```
