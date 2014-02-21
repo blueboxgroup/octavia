@@ -66,7 +66,7 @@ this to the command line:
     * none
 * **Sample Call:**
 ```
-curl -H 'Expect:' -E client_cert.pem -k https://199.91.169.39/status
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/status
 ```
 * **Response:**
 ```
