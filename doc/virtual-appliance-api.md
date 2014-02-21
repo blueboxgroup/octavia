@@ -30,7 +30,7 @@ requested operation if possible.
 
 Typical response codes are:
 * 200 OK - Operation was completed as requested.
-* 201 Created - Operation successfully resulted in the creation / processingx
+* 201 Created - Operation successfully resulted in the creation / processing
 of a file.
 * 403 Invalid Request - API script does not recognize the specified URL or
 HTTP method.
@@ -78,3 +78,29 @@ auto-scaling orchestration controller (heat) in order to determine whether
 additional (or fewer) virtual appliances are necessary to handle load. As such,
 we may add additional parameters to the JSON listing above if they prove to be
 useful for making these decisions.
+
+## Get services' statuses
+
+* **URL:** /service_status
+* **Method:** GET
+* **URL params:** none
+* **Data params:** none
+* **Success Response:**
+    * Code: 200
+    * Content: Human-readable listing of each service status (similar to the
+    output of the 'octctl status all' command)
+* **Error Response:**
+    * none
+* **Sample Call:**
+```
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
+```
+* **Response:**
+```
+cust44052_http_80_lbs6443                  OK
+  haproxy          running (pid 27327)
+cust44052_https_443_lbs6443                OK
+  haproxy          running (pid 9862)
+  stunnel          running (pid 9876)
+```
+* **Notes:**
