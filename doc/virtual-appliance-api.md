@@ -1,4 +1,4 @@
-Virtual Appliance API
+# Virtual Appliance API
 
 *Also known as the "back-end API"*
 
