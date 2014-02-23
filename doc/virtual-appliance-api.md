@@ -68,7 +68,7 @@ this to the command line:
 ```
 curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/status
 ```
-* **Response:**
+*Response:*
 ```
 {"network_tx":12245.6,"active_node":1,"network_rx":20521.8666666667,"haproxy_count":"2","hostname":"octavia-1.localnet","fencing_daemon_status":"OK","stunnel_count":"1","user_cpu":0.333333333333333,"system_cpu":0.233333333333333,"software_irq":0.0833333333333333,"load":["0.13","0.12","0.13"]}
 ```
@@ -95,7 +95,7 @@ useful for making these decisions.
 ```
 curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
 ```
-* **Response:**
+*Response:*
 ```
 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c                OK
   haproxy          running (pid 27327)
@@ -109,24 +109,24 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
 
 * **URL:** /instances
 * **Method:** GET
-* ** URL params:** none
-* ** Data params:** none
-* ** Success Response:**
+* **URL params:** none
+* **Data params:** none
+* **Success Response:**
     * Code: 200     
       Content: plain-text list of all instances for which files exist on the
       current host.
-* ** Error Response:
+* **Error Response:**
     * none
-* ** Sample Call:
+* **Sample Call:**
 ```
 curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances
 ```
-* ** Response:
+*Response:*
 ```
 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
 635bbdc6-65cd-41fc-b879-22c02aaf8951
 ```
-* ** Notes:
+* **Notes:**
 
 ## Check instance existence
 
@@ -146,7 +146,7 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances
 ```
 curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
 ```
-* **Response:**
+*Response:*
 ```
 OK
 ```
@@ -172,7 +172,7 @@ OK
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
 ```
-* **Response:**
+*Response:*
 ```
 OK
 haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
@@ -205,7 +205,7 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 ```
 curl -H 'Expect:' -E client_cert.pem -X PUT -T www.example.com.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
 ```
-* **Response:**
+*Response:*
 ```
 OK
 ```
@@ -234,7 +234,7 @@ of 'WILDCARD.example.com.pem'). Filenames must also have the .pem extension.
 ```
 curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
 ```
-* **Response:**
+*Response:*
 ```
 -----BEGIN RSA PRIVATE KEY-----
 MIICXQI...(cut for brevity)
@@ -264,7 +264,7 @@ MIIDEjCCAnu...(cut for brevity)
 ```
 curl -H 'Expect:' -E client_cert.pem -X DELETE -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
 ```
-* **Response:**
+*Response:*
 ```
 OK
 ```
@@ -291,7 +291,7 @@ OK
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T haproxy.cfg https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
 ```
-* **Response:**
+*Response:*
 ```
 OK
 Configuration file is valid
@@ -320,7 +320,7 @@ haproxy daemon for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c started (pid 32428)
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
 ```
-* **Response:**
+*Response:*
 ```
 # Config file for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
 (cut for brevity)
@@ -345,7 +345,7 @@ curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
 ```
-* **Response:**
+*Response:*
 ```
 OK
 haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
@@ -375,7 +375,7 @@ headers.)
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T 503.http https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
 ```
-* **Response:**
+*Response:*
 ```
 OK
 Configuration file is valid
@@ -402,7 +402,7 @@ haproxy daemon for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c restarted (pid 1138)
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
 ```
-* **Response:**
+*Response:*
 ```
 HTTP/1.0 503 Service Unavailable
 Cache-Control: no-cache
@@ -433,7 +433,7 @@ No server is available to handle this request, eh.
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
 ```
-* **Response:**
+*Response:*
 ```
 OK
 ```
@@ -458,7 +458,7 @@ OK
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T stunnel.conf https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
 ```
-* **Response:**
+*Response:*
 ```
 OK
 ```
@@ -492,7 +492,7 @@ occurence in any case.
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
 ```
-* **Response:**
+*Response:*
 ```
 ; stunnel config file for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
 (cut for brevity)
