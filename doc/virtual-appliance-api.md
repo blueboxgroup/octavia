@@ -13,7 +13,7 @@
     - [Get services' statuses](#get-services-statuses)
     - [List all listeners](#list-all-listeners)
     - [Check listener existence](#check-listener-existence)
-    - [Delete an listener](#delete-an-listener)
+    - [Delete a listener](#delete-a-listener)
     - [Upload SSL certificate PEM file](#upload-ssl-certificate-pem-file)
     - [Get SSL certificate PEM file](#get-ssl-certificate-pem-file)
     - [Delete SSL certificate PEM file](#delete-ssl-certificate-pem-file)
@@ -178,7 +178,7 @@ OK
 * **Notes:** Note that this returns OK if *any* files exist for the listener
 (not just if there is a valid haproxy or stunnel configuration).
 
-## Delete an listener
+## Delete a listener
 
 * **URL:** /listeners/*:listener*
 * **Method:** DELETE
