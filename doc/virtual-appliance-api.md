@@ -2,6 +2,31 @@ Virtual Appliance API
 
 *Also known as the "back-end API"*
 
+=====
+
+# Table of Contents
+
+- [Overview](#overview)
+    - [lighttpd, curl and the 'Expect:' header](#lighttpd-curl-and-the-expect-header)
+- [API](#api)
+    - [Get appliance status](#get-appliance-status)
+    - [Get services' statuses](#get-services-statuses)
+    - [List all listeners](#list-all-listeners)
+    - [Check listener existence](#check-listener-existence)
+    - [Delete an listener](#delete-an-listener)
+    - [Upload SSL certificate PEM file](#upload-ssl-certificate-pem-file)
+    - [Get SSL certificate PEM file](#get-ssl-certificate-pem-file)
+    - [Delete SSL certificate PEM file](#delete-ssl-certificate-pem-file)
+    - [Upload listener haproxy configuration](#upload-listener-haproxy-configuration)
+    - [Get listener haproxy configuration](#get-listener-haproxy-configuration)
+    - [Delete listener haproxy configuration](#delete-listener-haproxy-configuration)
+    - [Upload listener custom error 503 page](#upload-listener-custom-error-503-page)
+    - [Get listener custom error 503 page](#get-listener-custom-error-503-page)
+    - [Delete listener custom error 503 page](#delete-listener-custom-error-503-page)
+    - [Upload listener stunnel configuration](#upload-listener-stunnel-configuration)
+    - [Get listener stunnel configuration](#get-listener-stunnel-configuration)
+    - [Delete listener stunnel configuration](#delete-listener-stunnel-configuration)
+
 ======
 
 # Overview
