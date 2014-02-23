@@ -104,3 +104,51 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
   stunnel          running (pid 9876)
 ```
 * **Notes:**
+
+## List all instances
+
+* **URL:** /instances
+* **Method:** GET
+* ** URL params:** none
+* ** Data params:** none
+* ** Success Response:**
+    * Code: 200
+    * Content: plain-text list of all instances for which files exist on the
+    current host.
+* ** Error Response:
+    * none
+* ** Sample Call:
+```
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances
+```
+* ** Response:
+```
+7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
+635bbdc6-65cd-41fc-b879-22c02aaf8951
+```
+* ** Notes:
+
+## Check instance existence
+
+* **URL:** /instances/*:instance*
+* **Method:** GET
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** none
+* **Success Response:**
+    * Code: 200
+    * Content: OK
+* **Error Response:**
+    * Code: 404
+    * Content: Not Found
+    * *none*
+* **Sample Call:**
+```
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
+```
+* **Response:**
+```
+OK
+```
+* **Notes:** Note that this returns OK if *any* files exist for the instance
+(not just if there is a valid haproxy or stunnel configuration).
