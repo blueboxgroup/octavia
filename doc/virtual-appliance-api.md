@@ -221,7 +221,7 @@ of 'WILDCARD.example.com.pem'). Filenames must also have the .pem extension.
 * **URL:** /instances/*:instance*/certificates/*:filename.pem*
 * **Method:** GET
 * **URL params:**
-    * *:instance* = Instance ID (ex. cust1234_https_443_lbs56789 )
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
     * *:filename* = PEM filename (see notes below for naming convention)
 * **Data params:** none
 * **Success Response:**
@@ -232,7 +232,7 @@ of 'WILDCARD.example.com.pem'). Filenames must also have the .pem extension.
       Content: Not found
 * **Sample Call:**
 ```
-curl -H 'Expect:' -E client_cert.pem -k https://199.91.169.39/instances/cust1234_https_443_lbs56789/certificates/www.example.com.pem
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
 ```
 * **Response:**
 ```
