@@ -245,3 +245,287 @@ MIIDEjCCAnu...(cut for brevity)
 ```
 * **Implied actions:** none
 * **Notes:**
+
+## Delete SSL certificate PEM file
+
+* **URL:** /instances/*:instance*/certificates/*:filename.pem*
+* **Method:** DELETE
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:filename* = PEM filename (see notes below for naming convention)
+* **Data params:** none
+* **Success Response:**
+    * Code: 200     
+      Content: OK
+* **Error Response:**
+    * Code: 404     
+      Content: Not found
+* **Sample Call:**
+```
+curl -H 'Expect:' -E client_cert.pem -X DELETE -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
+```
+* **Response:**
+```
+OK
+```
+* **Implied actions:**
+    * Clean up instance configuration directory if it's now empty.
+* **Notes:**
+
+## Upload instance haproxy configuration
+
+* **URL:** /instances/*:instance*/haproxy
+* **Method:** PUT
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** haproxy configuration file for the instance
+* **Success Response:**
+    * Code: 201     
+      Content: OK     
+      *(Also includes output from attempt to start haproxy daemon)*
+* **Error Response:**
+    * Code: 409     
+      Content: Invalid configuration     
+      *(Also includes error output from configuration check command)*
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T haproxy.cfg https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
+```
+* **Response:**
+```
+OK
+Configuration file is valid
+haproxy daemon for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c started (pid 32428)
+```
+* **Implied actions:**
+    * Add IPs, iptables accounting rules, etc. to this server if they're not
+      already present.
+    * Start or restart haproxy instance.
+* **Notes:**
+
+## Get instance haproxy configuration
+
+* **URL:** /instances/*:instance*/haproxy
+* **Method:** GET
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** none
+* **Success Response:**
+    * Code: 200     
+      Content: haproxy configuration file for the instance
+* **Error Response:**
+    * Code: 404     
+      Content: Not found
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
+```
+* **Response:**
+```
+# Config file for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
+(cut for brevity)
+```
+* **Implied actions:** none
+* **Notes:**
+
+## Delete instance haproxy configuration
+
+* **URL:** /instances/*:instance*/haproxy
+* **Method:** DELETE
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** none
+* **Success Response:**
+    * Code: 200     
+      Content: OK (also includes output from stopping the instance)
+* **Error Response:**
+    * Code: 404     
+      Content: Not found
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
+```
+* **Response:**
+```
+OK
+haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
+```
+* **Implied actions:**
+    * Stop instance
+    * Delete IPs, iptables accounting rules, etc. from this server if they're
+      no longer in use.
+    * Clean up instance configuration directory if it's now empty.
+* **Notes:**
+
+## Upload instance custom error 503 page
+
+* **URL:** /instances/*:instance*/custom503
+* **Method:** PUT
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** Custom 503 http page (note, this must include the http
+headers. It is not an 'html' data file but the full http response including
+headers.)
+* **Success Response:**
+    * Code: 201     
+      Content: OK     
+      *(Also includes output from attempt to restart haproxy daemon)*
+* **Error Response:** none
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T 503.http https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
+```
+* **Response:**
+```
+OK
+Configuration file is valid
+haproxy daemon for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c restarted (pid 1138)
+```
+* **Implied actions:**
+    * Restart haproxy instance.
+* **Notes:** Note that the custom 503 page must be < 16k in size.
+
+## Get instance custom error 503 page
+
+* **URL:** /instances/*:instance*/custom503
+* **Method:** GET
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** none
+* **Success Response:**
+    * Code: 200     
+      Content: custom error 503 page for instance
+* **Error Response:**
+    * Code: 404     
+      Content: Not found
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
+```
+* **Response:**
+```
+HTTP/1.0 503 Service Unavailable
+Cache-Control: no-cache
+Connection: close
+Content-Type: text/html
+
+<html><body><h1>503 Service Unavailable</h1>
+No server is available to handle this request, eh.
+</body></html>
+```
+* **Implied actions:** none
+* **Notes:**
+
+## Delete instance custom error 503 page
+
+* **URL:** /instances/*:instance*/custom503
+* **Method:** DELETE
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** none
+* **Success Response:**
+    * Code: 200     
+      Content: OK
+* **Error Response:**
+    * Code: 404     
+      Content: Not found
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
+```
+* **Response:**
+```
+OK
+```
+* **Implied actions:** none
+* **Notes:**
+
+## Upload instance stunnel configuration
+
+* **URL:** /instances/*:instance*/stunnel
+* **Method:** PUT
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** stunnel configuration file for the instance
+* **Success Response:**
+    * Code: 201      
+      Content: OK
+* **Error Response:**
+    * Code: 409     
+      Content: Invalid configuration     
+      *(Also includes error output from configuration check attempt)*
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T stunnel.conf https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
+```
+* **Response:**
+```
+OK
+```
+* **Implied actions:**
+    * Add IPs, iptables accounting rules, etc. to this server if they're not
+      already present.
+    * Start or restart stunnel and haproxy instances.
+* **Notes:** Since we don't have a way to do a non-disruptive syntax check on
+the stunnel configuration file, at the present time we are required to
+actually stop the existing daemon to try running a new daemon using the new
+config. If this attempt fails, we attempt to roll back to the old config.
+There is the possibility that one of the certificate files may have been
+deleted (if other API commands were recived to do so) which may prevent a
+roll-back and leave the service in a 'down' state. This should be a very rare
+occurence in any case.
+
+## Get instance stunnel configuration
+
+* **URL:** /instances/*:instance*/stunnel
+* **Method:** GET
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** none
+* **Success Response:**
+    * Code: 200     
+      Content: stunnel configuration file for the instance
+* **Error Response:**
+    * Code: 404     
+      Content: Not found
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
+```
+* **Response:**
+```
+; stunnel config file for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
+(cut for brevity)
+```
+* **Implied actions:** none
+* **Notes:**
+
+## Delete instance stunnel configuration
+
+* **URL:** /instances/*:instance*/stunnel
+* **Method:** DELETE
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** none
+* **Success Response:**
+    * Code: 200    
+      Content: OK (also includes output from stopping the instance)
+* **Error Response:**
+    * Code: 404     
+      Content: Not found
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
+```
+*Response:*
+```
+OK
+haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
+stunnel daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
+```
+* **Implied actions:**
+    * Stop instance
+    * Delete IPs, iptables accounting rules, etc. from this server if they're
+      no longer in use.
+    * Clean up instance configuration directory if it's now empty.
+* **Notes:**
