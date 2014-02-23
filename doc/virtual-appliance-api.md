@@ -113,8 +113,8 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
 * ** Data params:** none
 * ** Success Response:**
     * Code: 200
-    * Content: plain-text list of all instances for which files exist on the
-    current host.
+        * Content: plain-text list of all instances for which files exist on the
+        current host.
 * ** Error Response:
     * none
 * ** Sample Call:
@@ -137,11 +137,11 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances
 * **Data params:** none
 * **Success Response:**
     * Code: 200
-    * Content: OK
+        * Content: OK
 * **Error Response:**
     * Code: 404
-    * Content: Not Found
-    * *none*
+        * Content: Not Found
+        * *none*
 * **Sample Call:**
 ```
 curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
@@ -162,11 +162,12 @@ OK
 * **Data params:** none
 * **Success Response:**
     * Code: 200
-    * Content: OK (Also includes output from commands run to stop the instance)
+        * Content: OK (Also includes output from commands run to stop the
+        instance)
 * **Error Response:**
     * Code: 404
-    * Content: Not Found
-    * none
+        * Content: Not Found
+        * none
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
@@ -192,7 +193,7 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 * **Data params:** Certificate data. (PEM file should be a concatenation of unencrypted RSA key, certificate and chain, in that order)
 * **Success Response:**
     * Code: 201
-    * Content: OK
+        * Content: OK
 * **Error Response:**
     * Code: 409
         * Content: No certififcate found
