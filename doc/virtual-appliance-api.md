@@ -179,7 +179,8 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 ```
 * **Implied actions:**
     * Stop listener
-    * Delete IPs, iptables accounting rules, etc. from this server if they're no longer in use.
+    * Delete IPs, iptables accounting rules, etc. from this appliance if
+      they're no longer in use.
     * Clean up listener configuration directory.
 * **Notes:**
 
@@ -298,8 +299,8 @@ Configuration file is valid
 haproxy daemon for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c started (pid 32428)
 ```
 * **Implied actions:**
-    * Add IPs, iptables accounting rules, etc. to this server if they're not
-      already present.
+    * Add IPs, iptables accounting rules, etc. to this appliance if they're
+i     not already present.
     * Start or restart haproxy listener.
 * **Notes:** The configuration uploaded is actually a template: Any occurrences of the string {MYIP} will be replaced with the appliance IP.
 
@@ -352,8 +353,8 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 ```
 * **Implied actions:**
     * Stop listener
-    * Delete IPs, iptables accounting rules, etc. from this server if they're
-      no longer in use.
+    * Delete IPs, iptables accounting rules, etc. from this appliance if
+      they're no longer in use.
     * Clean up listener configuration directory if it's now empty.
 * **Notes:**
 
@@ -463,8 +464,8 @@ curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T stunnel.conf https://10.0.0
 OK
 ```
 * **Implied actions:**
-    * Add IPs, iptables accounting rules, etc. to this server if they're not
-      already present.
+    * Add IPs, iptables accounting rules, etc. to this appliance if they're
+      not already present.
     * Start or restart stunnel and haproxy listeners.
 * **Notes:** Since we don't have a way to do a non-disruptive syntax check on
 the stunnel configuration file, at the present time we are required to
@@ -475,7 +476,7 @@ deleted (if other API commands were recived to do so) which may prevent a
 roll-back and leave the service in a 'down' state. This should be a very rare
 occurence in any case.     
 .     
-The configuration uploaded is actually a template: Any occurrences of the string {MYIP} will be replaced with the server IP.
+The configuration uploaded is actually a template: Any occurrences of the string {MYIP} will be replaced with the appliance IP.
 
 ## Get listener stunnel configuration
 
@@ -527,7 +528,7 @@ stunnel daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 ```
 * **Implied actions:**
     * Stop listener
-    * Delete IPs, iptables accounting rules, etc. from this server if they're
-      no longer in use.
+    * Delete IPs, iptables accounting rules, etc. from this appliance if
+      they're no longer in use.
     * Clean up listener configuration directory if it's now empty.
 * **Notes:**
