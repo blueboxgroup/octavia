@@ -60,8 +60,8 @@ this to the command line:
 * **URL params:** none
 * **Data params:** none
 * **Success Response:**
-    * Code: 200
-    * Content: JSON formatted listing of various appliance statistics.
+    * Code: 200     
+    Content: JSON formatted listing of various appliance statistics.
 * **Error Response:**
     * none
 * **Sample Call:**
@@ -86,8 +86,8 @@ useful for making these decisions.
 * **URL params:** none
 * **Data params:** none
 * **Success Response:**
-    * Code: 200
-    * Content: Human-readable listing of each service status (similar to the
+    * Code: 200     
+    Content: Human-readable listing of each service status (similar to the
     output of the 'octctl status all' command)
 * **Error Response:**
     * none
@@ -112,9 +112,9 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
 * ** URL params:** none
 * ** Data params:** none
 * ** Success Response:**
-    * Code: 200
-        * Content: plain-text list of all instances for which files exist on the
-        current host.
+    * Code: 200     
+    Content: plain-text list of all instances for which files exist on the
+    current host.
 * ** Error Response:
     * none
 * ** Sample Call:
@@ -136,12 +136,12 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances
     * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
-    * Code: 200
-        * Content: OK
+    * Code: 200     
+    Content: OK
 * **Error Response:**
-    * Code: 404
-        * Content: Not Found
-        * *none*
+    * Code: 404     
+    Content: Not Found
+    *none*
 * **Sample Call:**
 ```
 curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
@@ -161,13 +161,13 @@ OK
     * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
-    * Code: 200
-        * Content: OK (Also includes output from commands run to stop the
-        instance)
+    * Code: 200     
+    Content: OK (Also includes output from commands run to stop the
+    instance)
 * **Error Response:**
-    * Code: 404
-        * Content: Not Found
-        * none
+    * Code: 404     
+    Content: Not Found     
+    *none*
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
@@ -192,8 +192,8 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
     * *:filename* = PEM filename (see notes below for naming convention)
 * **Data params:** Certificate data. (PEM file should be a concatenation of unencrypted RSA key, certificate and chain, in that order)
 * **Success Response:**
-    * Code: 201
-        * Content: OK
+    * Code: 201     
+    Content: OK
 * **Error Response:**
     * Code: 409     
     Content: No certififcate found
