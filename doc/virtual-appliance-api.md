@@ -195,12 +195,12 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
     * Code: 201
         * Content: OK
 * **Error Response:**
-    * Code: 409
-        * Content: No certififcate found
-    * Code: 409
-        * Content: No RSA key found
-    * Code: 409
-        * Content: Certificate and key do not match
+    * Code: 409     
+    Content: No certififcate found
+    * Code: 409     
+    Content: No RSA key found
+    * Code: 409     
+    Content: Certificate and key do not match
 * **Sample Call:**
 ```
 curl -H 'Expect:' -E client_cert.pem -X PUT -T www.example.com.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
