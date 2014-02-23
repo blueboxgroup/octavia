@@ -1,8 +1,12 @@
 # TODO
 
-## import back-end api documentation from BLBv2, update as necessary to support
+## import back-end api documentation from BLBv2
+* Update as necessary to support topology configuration
+* Update as necessary to fix non-api like features of old api
 
 ## Document image deployment methodology, including role 'controller' plays
+
+## Document (with diagrams) topology options
 
 ## Decide whether to use openstack/diskimage-builder or some other tool for creating appliance image
 

@@ -10,9 +10,9 @@
     - [lighttpd, curl and the 'Expect:' header](#lighttpd-curl-and-the-expect-header)
 - [API](#api)
     - [Get appliance status](#get-appliance-status)
-    - [Get services' statuses](#get-services-statuses)
+    - [Get listeners' statuses](#get-listeners-statuses)
     - [List all listeners](#list-all-listeners)
-    - [Check listener existence](#check-listener-existence)
+    - [Check a listener's status](#check-a-listeners-status)
     - [Delete a listener](#delete-a-listener)
     - [Upload SSL certificate PEM file](#upload-ssl-certificate-pem-file)
     - [Get SSL certificate PEM file](#get-ssl-certificate-pem-file)
@@ -95,7 +95,7 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/status
 ```
 *Response:*
 ```
-{"network_tx":12245.6,"active_node":1,"network_rx":20521.8666666667,"haproxy_count":"2","hostname":"octavia-1.localnet","fencing_daemon_status":"OK","stunnel_count":"1","user_cpu":0.333333333333333,"system_cpu":0.233333333333333,"software_irq":0.0833333333333333,"load":["0.13","0.12","0.13"]}
+{"network_tx":12245.6,"active_node":1,"network_rx":20521.8666666667,"haproxy_count":"2","hostname":"octavia-1.localnet","fencing_daemon_status":"OK","stunnel_count":"1","user_cpu":0.333333333333333,"system_cpu":0.233333333333333,"software_irq":0.0833333333333333,"load":["0.13","0.12","0.13"],"topology":"active-standby","role":"primary"}
 ```
 
 **Notes:** The data in this request is meant to provide intelligence for an
@@ -104,16 +104,18 @@ additional (or fewer) virtual appliances are necessary to handle load. As such,
 we may add additional parameters to the JSON listing above if they prove to be
 useful for making these decisions.
 
-## Get services' statuses
+The data in this request is also used by the controller for determining overall
+health of the load balancer, currently-configured topology and role, etc.
 
-* **URL:** /service_status
+## Get listeners' statuses
+
+* **URL:** /listeners_status
 * **Method:** GET
 * **URL params:** none
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-      Content: Human-readable listing of each service status (similar to the
-      output of the 'octctl status all' command)
+      Content: JSON-formatted listing of each listener's status
 * **Error Response:**
     * none
 * **Sample Call:**
@@ -122,11 +124,7 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
 ```
 *Response:*
 ```
-7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c                OK
-  haproxy          running (pid 27327)
-635bbdc6-65cd-41fc-b879-22c02aaf8951                OK
-  haproxy          running (pid 9862)
-  stunnel          running (pid 9876)
+[{"stunnel":"running","status":"OK","type":"HTTPS","id":"7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c","haproxy":"running"},{"status":"DOWN","type":"TCP","id":"635bbdc6-65cd-41fc-b879-22c02aaf8951","haproxy":"stopped"}]
 ```
 * **Notes:**
 
@@ -153,7 +151,7 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/listeners
 ```
 * **Notes:**
 
-## Check listener existence
+## Check a listener's status
 
 * **URL:** /listeners/*:listener*
 * **Method:** GET
@@ -162,7 +160,7 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/listeners
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-      Content: OK
+      Content: JSON-formatted listener status
 * **Error Response:**
     * Code: 404     
       Content: Not Found
@@ -173,10 +171,10 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/listeners/7e9f91eb-b3e6
 ```
 *Response:*
 ```
-OK
+{"stunnel":"running","status":"OK","type":"HTTPS","id":"7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c","haproxy":"running"}
 ```
-* **Notes:** Note that this returns OK if *any* files exist for the listener
-(not just if there is a valid haproxy or stunnel configuration).
+* **Notes:** Note that this returns a status if *any* files exist for the
+listener (not just if there is a valid haproxy or stunnel configuration).
 
 ## Delete a listener
 
