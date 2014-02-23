@@ -105,21 +105,21 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
 ```
 * **Notes:**
 
-## List all instances
+## List all listeners
 
-* **URL:** /instances
+* **URL:** /listeners
 * **Method:** GET
 * **URL params:** none
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-      Content: plain-text list of all instances for which files exist on the
+      Content: plain-text list of all listeners for which files exist on the
       current host.
 * **Error Response:**
     * none
 * **Sample Call:**
 ```
-curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/listeners
 ```
 *Response:*
 ```
@@ -128,12 +128,12 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances
 ```
 * **Notes:**
 
-## Check instance existence
+## Check listener existence
 
-* **URL:** /instances/*:instance*
+* **URL:** /listeners/*:listener*
 * **Method:** GET
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
@@ -144,33 +144,33 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances
       *none*
 * **Sample Call:**
 ```
-curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
 ```
 *Response:*
 ```
 OK
 ```
-* **Notes:** Note that this returns OK if *any* files exist for the instance
+* **Notes:** Note that this returns OK if *any* files exist for the listener
 (not just if there is a valid haproxy or stunnel configuration).
 
-## Delete an instance
+## Delete an listener
 
-* **URL:** /instances/*:instance*
+* **URL:** /listeners/*:listener*
 * **Method:** DELETE
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
       Content: OK (Also includes output from commands run to stop the
-      instance)
+      listener)
 * **Error Response:**
     * Code: 404     
       Content: Not Found     
       *none*
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
+curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
 ```
 *Response:*
 ```
@@ -178,17 +178,17 @@ OK
 haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 ```
 * **Implied actions:**
-    * Stop instance
+    * Stop listener
     * Delete IPs, iptables accounting rules, etc. from this server if they're no longer in use.
-    * Clean up instance configuration directory.
+    * Clean up listener configuration directory.
 * **Notes:**
 
 ## Upload SSL certificate PEM file
 
-* **URL:** /instances/*:instance*/certificates/*:filename.pem*
+* **URL:** /listeners/*:listener*/certificates/*:filename.pem*
 * **Method:** PUT
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
     * *:filename* = PEM filename (see notes below for naming convention)
 * **Data params:** Certificate data. (PEM file should be a concatenation of unencrypted RSA key, certificate and chain, in that order)
 * **Success Response:**
@@ -203,7 +203,7 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
       Content: Certificate and key do not match
 * **Sample Call:**
 ```
-curl -H 'Expect:' -E client_cert.pem -X PUT -T www.example.com.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
+curl -H 'Expect:' -E client_cert.pem -X PUT -T www.example.com.pem -k https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
 ```
 *Response:*
 ```
@@ -218,10 +218,10 @@ of 'WILDCARD.example.com.pem'). Filenames must also have the .pem extension.
 
 ## Get SSL certificate PEM file
 
-* **URL:** /instances/*:instance*/certificates/*:filename.pem*
+* **URL:** /listeners/*:listener*/certificates/*:filename.pem*
 * **Method:** GET
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
     * *:filename* = PEM filename (see notes below for naming convention)
 * **Data params:** none
 * **Success Response:**
@@ -232,7 +232,7 @@ of 'WILDCARD.example.com.pem'). Filenames must also have the .pem extension.
       Content: Not found
 * **Sample Call:**
 ```
-curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
 ```
 *Response:*
 ```
@@ -248,10 +248,10 @@ MIIDEjCCAnu...(cut for brevity)
 
 ## Delete SSL certificate PEM file
 
-* **URL:** /instances/*:instance*/certificates/*:filename.pem*
+* **URL:** /listeners/*:listener*/certificates/*:filename.pem*
 * **Method:** DELETE
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
     * *:filename* = PEM filename (see notes below for naming convention)
 * **Data params:** none
 * **Success Response:**
@@ -262,23 +262,23 @@ MIIDEjCCAnu...(cut for brevity)
       Content: Not found
 * **Sample Call:**
 ```
-curl -H 'Expect:' -E client_cert.pem -X DELETE -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
+curl -H 'Expect:' -E client_cert.pem -X DELETE -k https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
 ```
 *Response:*
 ```
 OK
 ```
 * **Implied actions:**
-    * Clean up instance configuration directory if it's now empty.
+    * Clean up listener configuration directory if it's now empty.
 * **Notes:**
 
-## Upload instance haproxy configuration
+## Upload listener haproxy configuration
 
-* **URL:** /instances/*:instance*/haproxy
+* **URL:** /listeners/*:listener*/haproxy
 * **Method:** PUT
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
-* **Data params:** haproxy configuration file for the instance
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** haproxy configuration file for the listener
 * **Success Response:**
     * Code: 201     
       Content: OK     
@@ -289,7 +289,7 @@ OK
       *(Also includes error output from configuration check command)*
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T haproxy.cfg https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
+curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T haproxy.cfg https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
 ```
 *Response:*
 ```
@@ -300,25 +300,25 @@ haproxy daemon for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c started (pid 32428)
 * **Implied actions:**
     * Add IPs, iptables accounting rules, etc. to this server if they're not
       already present.
-    * Start or restart haproxy instance.
-* **Notes:**
+    * Start or restart haproxy listener.
+* **Notes:** The configuration uploaded is actually a template: Any occurrences of the string __MYIP__ will be replaced with the appliance IP.
 
-## Get instance haproxy configuration
+## Get listener haproxy configuration
 
-* **URL:** /instances/*:instance*/haproxy
+* **URL:** /listeners/*:listener*/haproxy
 * **Method:** GET
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-      Content: haproxy configuration file for the instance
+      Content: haproxy configuration file for the listener
 * **Error Response:**
     * Code: 404     
       Content: Not found
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
+curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
 ```
 *Response:*
 ```
@@ -328,22 +328,22 @@ curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b
 * **Implied actions:** none
 * **Notes:**
 
-## Delete instance haproxy configuration
+## Delete listener haproxy configuration
 
-* **URL:** /instances/*:instance*/haproxy
+* **URL:** /listeners/*:listener*/haproxy
 * **Method:** DELETE
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-      Content: OK (also includes output from stopping the instance)
+      Content: OK (also includes output from stopping the listener)
 * **Error Response:**
     * Code: 404     
       Content: Not found
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
+curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
 ```
 *Response:*
 ```
@@ -351,18 +351,18 @@ OK
 haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 ```
 * **Implied actions:**
-    * Stop instance
+    * Stop listener
     * Delete IPs, iptables accounting rules, etc. from this server if they're
       no longer in use.
-    * Clean up instance configuration directory if it's now empty.
+    * Clean up listener configuration directory if it's now empty.
 * **Notes:**
 
-## Upload instance custom error 503 page
+## Upload listener custom error 503 page
 
-* **URL:** /instances/*:instance*/custom503
+* **URL:** /listeners/*:listener*/custom503
 * **Method:** PUT
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** Custom 503 http page (note, this must include the http
 headers. It is not an 'html' data file but the full http response including
 headers.)
@@ -373,7 +373,7 @@ headers.)
 * **Error Response:** none
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T 503.http https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
+curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T 503.http https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
 ```
 *Response:*
 ```
@@ -382,25 +382,25 @@ Configuration file is valid
 haproxy daemon for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c restarted (pid 1138)
 ```
 * **Implied actions:**
-    * Restart haproxy instance.
+    * Restart haproxy listener.
 * **Notes:** Note that the custom 503 page must be < 16k in size.
 
-## Get instance custom error 503 page
+## Get listener custom error 503 page
 
-* **URL:** /instances/*:instance*/custom503
+* **URL:** /listeners/*:listener*/custom503
 * **Method:** GET
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-      Content: custom error 503 page for instance
+      Content: custom error 503 page for listener
 * **Error Response:**
     * Code: 404     
       Content: Not found
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
+curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
 ```
 *Response:*
 ```
@@ -416,12 +416,12 @@ No server is available to handle this request, eh.
 * **Implied actions:** none
 * **Notes:**
 
-## Delete instance custom error 503 page
+## Delete listener custom error 503 page
 
-* **URL:** /instances/*:instance*/custom503
+* **URL:** /listeners/*:listener*/custom503
 * **Method:** DELETE
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
@@ -431,7 +431,7 @@ No server is available to handle this request, eh.
       Content: Not found
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
+curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
 ```
 *Response:*
 ```
@@ -440,13 +440,13 @@ OK
 * **Implied actions:** none
 * **Notes:**
 
-## Upload instance stunnel configuration
+## Upload listener stunnel configuration
 
-* **URL:** /instances/*:instance*/stunnel
+* **URL:** /listeners/*:listener*/stunnel
 * **Method:** PUT
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
-* **Data params:** stunnel configuration file for the instance
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** stunnel configuration file for the listener
 * **Success Response:**
     * Code: 201      
       Content: OK
@@ -456,7 +456,7 @@ OK
       *(Also includes error output from configuration check attempt)*
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T stunnel.conf https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
+curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T stunnel.conf https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
 ```
 *Response:*
 ```
@@ -465,7 +465,7 @@ OK
 * **Implied actions:**
     * Add IPs, iptables accounting rules, etc. to this server if they're not
       already present.
-    * Start or restart stunnel and haproxy instances.
+    * Start or restart stunnel and haproxy listeners.
 * **Notes:** Since we don't have a way to do a non-disruptive syntax check on
 the stunnel configuration file, at the present time we are required to
 actually stop the existing daemon to try running a new daemon using the new
@@ -473,24 +473,26 @@ config. If this attempt fails, we attempt to roll back to the old config.
 There is the possibility that one of the certificate files may have been
 deleted (if other API commands were recived to do so) which may prevent a
 roll-back and leave the service in a 'down' state. This should be a very rare
-occurence in any case.
+occurence in any case.     
+.     
+The configuration uploaded is actually a template: Any occurrences of the string __MYIP__ will be replaced with the server IP.
 
-## Get instance stunnel configuration
+## Get listener stunnel configuration
 
-* **URL:** /instances/*:instance*/stunnel
+* **URL:** /listeners/*:listener*/stunnel
 * **Method:** GET
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-      Content: stunnel configuration file for the instance
+      Content: stunnel configuration file for the listener
 * **Error Response:**
     * Code: 404     
       Content: Not found
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
+curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
 ```
 *Response:*
 ```
@@ -500,22 +502,22 @@ curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/instances/7e9f91eb-b
 * **Implied actions:** none
 * **Notes:**
 
-## Delete instance stunnel configuration
+## Delete listener stunnel configuration
 
-* **URL:** /instances/*:instance*/stunnel
+* **URL:** /listeners/*:listener*/stunnel
 * **Method:** DELETE
 * **URL params:**
-    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:listener* = Listener ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
 * **Data params:** none
 * **Success Response:**
     * Code: 200    
-      Content: OK (also includes output from stopping the instance)
+      Content: OK (also includes output from stopping the listener)
 * **Error Response:**
     * Code: 404     
       Content: Not found
 * **Sample Call:**
 ```
-curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
+curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
 ```
 *Response:*
 ```
@@ -524,8 +526,8 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 stunnel daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 ```
 * **Implied actions:**
-    * Stop instance
+    * Stop listener
     * Delete IPs, iptables accounting rules, etc. from this server if they're
       no longer in use.
-    * Clean up instance configuration directory if it's now empty.
+    * Clean up listener configuration directory if it's now empty.
 * **Notes:**
