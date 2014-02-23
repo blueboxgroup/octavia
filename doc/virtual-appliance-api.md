@@ -301,7 +301,7 @@ haproxy daemon for 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c started (pid 32428)
     * Add IPs, iptables accounting rules, etc. to this server if they're not
       already present.
     * Start or restart haproxy listener.
-* **Notes:** The configuration uploaded is actually a template: Any occurrences of the string __MYIP__ will be replaced with the appliance IP.
+* **Notes:** The configuration uploaded is actually a template: Any occurrences of the string {MYIP} will be replaced with the appliance IP.
 
 ## Get listener haproxy configuration
 
@@ -475,7 +475,7 @@ deleted (if other API commands were recived to do so) which may prevent a
 roll-back and leave the service in a 'down' state. This should be a very rare
 occurence in any case.     
 .     
-The configuration uploaded is actually a template: Any occurrences of the string __MYIP__ will be replaced with the server IP.
+The configuration uploaded is actually a template: Any occurrences of the string {MYIP} will be replaced with the server IP.
 
 ## Get listener stunnel configuration
 
