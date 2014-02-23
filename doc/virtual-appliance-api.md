@@ -61,7 +61,7 @@ this to the command line:
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-    Content: JSON formatted listing of various appliance statistics.
+      Content: JSON formatted listing of various appliance statistics.
 * **Error Response:**
     * none
 * **Sample Call:**
@@ -87,8 +87,8 @@ useful for making these decisions.
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-    Content: Human-readable listing of each service status (similar to the
-    output of the 'octctl status all' command)
+      Content: Human-readable listing of each service status (similar to the
+      output of the 'octctl status all' command)
 * **Error Response:**
     * none
 * **Sample Call:**
@@ -113,8 +113,8 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
 * ** Data params:** none
 * ** Success Response:**
     * Code: 200     
-    Content: plain-text list of all instances for which files exist on the
-    current host.
+      Content: plain-text list of all instances for which files exist on the
+      current host.
 * ** Error Response:
     * none
 * ** Sample Call:
@@ -137,11 +137,11 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-    Content: OK
+      Content: OK
 * **Error Response:**
     * Code: 404     
-    Content: Not Found
-    *none*
+      Content: Not Found
+      *none*
 * **Sample Call:**
 ```
 curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
@@ -162,12 +162,12 @@ OK
 * **Data params:** none
 * **Success Response:**
     * Code: 200     
-    Content: OK (Also includes output from commands run to stop the
-    instance)
+      Content: OK (Also includes output from commands run to stop the
+      instance)
 * **Error Response:**
     * Code: 404     
-    Content: Not Found     
-    *none*
+      Content: Not Found     
+      *none*
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
@@ -193,14 +193,14 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
 * **Data params:** Certificate data. (PEM file should be a concatenation of unencrypted RSA key, certificate and chain, in that order)
 * **Success Response:**
     * Code: 201     
-    Content: OK
+      Content: OK
 * **Error Response:**
     * Code: 409     
-    Content: No certififcate found
+      Content: No certififcate found
     * Code: 409     
-    Content: No RSA key found
+      Content: No RSA key found
     * Code: 409     
-    Content: Certificate and key do not match
+      Content: Certificate and key do not match
 * **Sample Call:**
 ```
 curl -H 'Expect:' -E client_cert.pem -X PUT -T www.example.com.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
@@ -215,3 +215,33 @@ OK
 certificate is valid. All-caps WILDCARD should be used to replace an asterisk
 in a wildcard certificate (eg. a CN of '*.example.com' should have a filename
 of 'WILDCARD.example.com.pem'). Filenames must also have the .pem extension.
+
+## Get SSL certificate PEM file
+
+* **URL:** /instances/*:instance*/certificates/*:filename.pem*
+* **Method:** GET
+* **URL params:**
+    * *:instance* = Instance ID (ex. cust1234_https_443_lbs56789 )
+    * *:filename* = PEM filename (see notes below for naming convention)
+* **Data params:** none
+* **Success Response:**
+    * Code: 200     
+      Content: PEM file data
+* **Error Response:**
+    * Code: 404     
+      Content: Not found
+* **Sample Call:**
+```
+curl -H 'Expect:' -E client_cert.pem -k https://199.91.169.39/instances/cust1234_https_443_lbs56789/certificates/www.example.com.pem
+```
+* **Response:**
+```
+-----BEGIN RSA PRIVATE KEY-----
+MIICXQI...(cut for brevity)
+-----END RSA PRIVATE KEY-----
+-----BEGIN CERTIFICATE-----
+MIIDEjCCAnu...(cut for brevity)
+-----END CERTIFICATE-----
+```
+* **Implied actions:** none
+* **Notes:**
