@@ -152,3 +152,65 @@ OK
 ```
 * **Notes:** Note that this returns OK if *any* files exist for the instance
 (not just if there is a valid haproxy or stunnel configuration).
+
+## Delete an instance
+
+* **URL:** /instances/*:instance*
+* **Method:** DELETE
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+* **Data params:** none
+* **Success Response:**
+    * Code: 200
+    * Content: OK (Also includes output from commands run to stop the instance)
+* **Error Response:**
+    * Code: 404
+    * Content: Not Found
+    * none
+* **Sample Call:**
+```
+curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
+```
+* **Response:**
+```
+OK
+haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
+```
+* **Implied actions:**
+    * Stop instance
+    * Delete IPs, iptables accounting rules, etc. from this server if they're no longer in use.
+    * Clean up instance configuration directory.
+* **Notes:**
+
+## Upload SSL certificate PEM file
+
+* **URL:** /instances/*:instance*/certificates/*:filename.pem*
+* **Method:** PUT
+* **URL params:**
+    * *:instance* = Instance ID (ex. 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c )
+    * *:filename* = PEM filename (see notes below for naming convention)
+* **Data params:** Certificate data. (PEM file should be a concatenation of unencrypted RSA key, certificate and chain, in that order)
+* **Success Response:**
+    * Code: 201
+    * Content: OK
+* **Error Response:**
+    * Code: 409
+    Content: No certififcate found
+    * Code: 409
+    Content: No RSA key found
+    * Code: 409
+    Content: Certificate and key do not match
+* **Sample Call:**
+```
+curl -H 'Expect:' -E client_cert.pem -X PUT -T www.example.com.pem -k https://10.0.0.2/instances/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
+```
+* **Response:**
+```
+OK
+```
+* **Implied actions:**
+    * Restart stunnel and haproxy for the given listener.
+* **Notes:** filename.pem should match the primary CN for which the
+certificate is valid. All-caps WILDCARD should be used to replace an asterisk
+in a wildcard certificate (eg. a CN of '*.example.com' should have a filename
+of 'WILDCARD.example.com.pem'). Filenames must also have the .pem extension.
