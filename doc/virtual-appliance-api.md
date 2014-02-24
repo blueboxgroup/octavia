@@ -124,7 +124,7 @@ output.
       Content: Invalid request.
       *(Response will also include information on which parameters did not pass
       either a syntax check or other topology logic test)*
-    * Code: 503
+    * Code: 503     
       Content: Cluster transition in progress
 * **Sample Call:**
 ```
@@ -236,7 +236,7 @@ listener (not just if there is a valid haproxy or stunnel configuration).
     * Code: 404     
       Content: Not Found     
       *none*
-    * Code: 503
+    * Code: 503     
       Content: Cluster transition in progress
 * **Sample Call:**
 ```
@@ -272,7 +272,7 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
       Content: No RSA key found
     * Code: 409     
       Content: Certificate and key do not match
-    * Code: 503
+    * Code: 503     
       Content: Cluster transition in progress
 * **Sample Call:**
 ```
@@ -333,7 +333,7 @@ MIIDEjCCAnu...(cut for brevity)
 * **Error Response:**
     * Code: 404     
       Content: Not found
-    * Code: 503
+    * Code: 503     
       Content: Cluster transition in progress
 * **Sample Call:**
 ```
@@ -362,7 +362,7 @@ OK
     * Code: 409     
       Content: Invalid configuration     
       *(Also includes error output from configuration check command)*
-    * Code: 503
+    * Code: 503     
       Content: Cluster transition in progress
 * **Sample Call:**
 ```
@@ -418,7 +418,7 @@ curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/listeners/7e9f91eb-b
 * **Error Response:**
     * Code: 404     
       Content: Not found
-    * Code: 503
+    * Code: 503     
       Content: Cluster transition in progress
 * **Sample Call:**
 ```
@@ -450,7 +450,7 @@ headers.)
       Content: OK     
       *(Also includes output from attempt to restart haproxy daemon)*
 * **Error Response:**
-    * Code: 503
+    * Code: 503     
       Content: Cluster transition in progress
 * **Sample Call:**
 ```
@@ -510,7 +510,7 @@ No server is available to handle this request, eh.
 * **Error Response:**
     * Code: 404     
       Content: Not found
-    * Code: 503
+    * Code: 503     
       Content: Cluster transition in progress
 * **Sample Call:**
 ```
@@ -600,7 +600,7 @@ curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/listeners/7e9f91eb-b
 * **Error Response:**
     * Code: 404     
       Content: Not found
-    * Code: 503
+    * Code: 503     
       Content: Cluster transition in progress
 * **Sample Call:**
 ```
