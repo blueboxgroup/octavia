@@ -63,7 +63,8 @@ HTTP method.
 * 404 Not Found - The requested file was not found.
 * 409 Conflict - Usually indicates a problem with a PUT data file.
 * 500 Internal Server Error - Usually indicates a permissions problem that the
-API script encountered.
+* 503 Service Unavailable - Usually indicates a change to a listener was
+attempted during a transition of cluster topology.
 
 ## lighttpd, curl and the 'Expect:' header
 
@@ -123,6 +124,8 @@ output.
       Content: Invalid request.
       *(Response will also include information on which parameters did not pass
       either a syntax check or other topology logic test)*
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -H 'Expect:' -E client_cert.pem -k -d topology=ACTIVE-STANDBY -d routing-mode=ROUTED -d role=PRIMARY -d ha_ip=10.0.0.5 -d primary_ip=10.0.0.2 -d all_ips[0]=10.0.0.2 -d all_ips[1]=10.0.0.3 -d secret=supersecret -X POST https://10.0.0.2/topology
@@ -134,6 +137,13 @@ OK
 **Notes:** In an ACTIVE-STANDBY configuration, the 'role' parameter might
 change spontaneously due to a failure of one node. On other topologies, the
 role should not spontaneously change.
+
+Also note that some topology changes can take several minutes to enact, yet
+we want all API commands to return in a matter of seconds. In this case, a
+topology change is initiated, and the appliance status changes from "OK" to
+"TOPOLOGY-CHANGE". The controller should not try to change any resources during
+this transition. (Any attempts will be met with an error.) Once the
+topology change is complete, appliance status should return to "OK".
 
 ## Get appliance status
 
@@ -152,7 +162,7 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/status
 ```
 *Response:*
 ```
-{"network_tx":12245.6,"active_node":1,"network_rx":20521.8666666667,"haproxy_count":"2","hostname":"octavia-1.localnet","fencing_daemon_status":"OK","stunnel_count":"1","user_cpu":0.333333333333333,"system_cpu":0.233333333333333,"software_irq":0.0833333333333333,"load":["0.13","0.12","0.13"],"topology":"ACTIVE-STANDBY","role":"PRIMARY","topology_status":"ACTIVE"}
+{"network_tx":12245.6,"active_node":1,"network_rx":20521.8666666667,"haproxy_count":"2","hostname":"octavia-1.localnet","fencing_daemon_status":"OK","stunnel_count":"1","user_cpu":0.333333333333333,"system_cpu":0.233333333333333,"software_irq":0.0833333333333333,"load":["0.13","0.12","0.13"],"topology":"ACTIVE-STANDBY","role":"PRIMARY","topology_status":"OK"}
 ```
 
 **Notes:** The data in this request is meant to provide intelligence for an
@@ -226,6 +236,8 @@ listener (not just if there is a valid haproxy or stunnel configuration).
     * Code: 404     
       Content: Not Found     
       *none*
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
@@ -260,6 +272,8 @@ haproxy daemon 7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c killed.
       Content: No RSA key found
     * Code: 409     
       Content: Certificate and key do not match
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -H 'Expect:' -E client_cert.pem -X PUT -T www.example.com.pem -k https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
@@ -319,6 +333,8 @@ MIIDEjCCAnu...(cut for brevity)
 * **Error Response:**
     * Code: 404     
       Content: Not found
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -H 'Expect:' -E client_cert.pem -X DELETE -k https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/certificates/www.example.com.pem
@@ -346,6 +362,8 @@ OK
     * Code: 409     
       Content: Invalid configuration     
       *(Also includes error output from configuration check command)*
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T haproxy.cfg https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
@@ -400,6 +418,8 @@ curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/listeners/7e9f91eb-b
 * **Error Response:**
     * Code: 404     
       Content: Not found
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/haproxy
@@ -429,7 +449,9 @@ headers.)
     * Code: 201     
       Content: OK     
       *(Also includes output from attempt to restart haproxy daemon)*
-* **Error Response:** none
+* **Error Response:**
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T 503.http https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
@@ -488,6 +510,8 @@ No server is available to handle this request, eh.
 * **Error Response:**
     * Code: 404     
       Content: Not found
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/custom503
@@ -513,6 +537,8 @@ OK
     * Code: 409     
       Content: Invalid configuration     
       *(Also includes error output from configuration check attempt)*
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X PUT -T stunnel.conf https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
@@ -574,6 +600,8 @@ curl -k -E client_cert.pem -H 'Expect:' -v https://10.0.0.2/listeners/7e9f91eb-b
 * **Error Response:**
     * Code: 404     
       Content: Not found
+    * Code: 503
+      Content: Cluster transition in progress
 * **Sample Call:**
 ```
 curl -k -E client_cert.pem -H 'Expect:' -v -X DELETE https://10.0.0.2/listeners/7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c/stunnel
