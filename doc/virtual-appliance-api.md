@@ -10,9 +10,8 @@
     - [lighttpd, curl and the 'Expect:' header](#lighttpd-curl-and-the-expect-header)
 - [API](#api)
     - [Get appliance status](#get-appliance-status)
-    - [Get listeners' statuses](#get-listeners-statuses)
-    - [List all listeners](#list-all-listeners)
-    - [Check a listener's status](#check-a-listeners-status)
+    - [Get all listeners' statuses](#get-all-listeners-statuses)
+    - [Get a listener's status](#get-a-listeners-status)
     - [Delete a listener](#delete-a-listener)
     - [Upload SSL certificate PEM file](#upload-ssl-certificate-pem-file)
     - [Get SSL certificate PEM file](#get-ssl-certificate-pem-file)
@@ -78,6 +77,62 @@ this to the command line:
 
 # API
 
+## Get appliance topology
+
+* **URL:** /topology
+* **Method:** GET
+* **URL params:** none
+* **Data params:** none
+* **Success Response:**
+    * Code: 200     
+      Content: JSON formatted listing of this appliance's configured topology.
+* **Error Response:**
+    * none
+* **Sample Call:**
+```
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/topology
+```
+*Response:*
+```
+{"hostname":"octavia-1.localnet","topology":"ACTIVE-STANDBY","role":"PRIMARY","primary_ip":"10.0.0.2","ha_ip":"10.0.0.5","all_ips":["10.0.0.2","10.0.0.3"],"routing-mode":"ROUTED"}
+```
+**Notes:** See "Set appliance topology" below for meaning of items in the JSON
+output.
+
+## Set appliance topology
+
+* **URL:** /topology
+* **Method:** POST
+* **URL params:** none
+* **Data params:**
+    * *topology*: One of: "SINGLE", "ACTIVE-STANDBY", "ACTIVE-ACTIVE"
+    * *routing-mode*: One of: "LAYER2", "ROUTED"
+    * *role*: One of: "PRIMARY", "SECONDARY"
+    * *ha_ip*: Highly-available IP for the cluster
+    * *primary_ip*: IPv4 IP of the primary appliance in HA configurations.
+    * *all_ips*: JSON-formatted array of all appliance IPs (IPv4 and IPv6) in
+      the cluster.
+    * *secret*: Shared secret used in ACTIVE-STANDBY topology
+* **Success Response:**
+    * Code: 200     
+      Content: OK
+* **Error Response:**
+    * Code: 409     
+      Content: Invalid request.
+      *(Response will also include information on which parameters did not pass
+      either a syntax check or other topology logic test)*
+* **Sample Call:**
+```
+curl -H 'Expect:' -E client_cert.pem -k -d topology=ACTIVE-STANDBY -d routing-mode=ROUTED -d role=PRIMARY -d ha_ip=10.0.0.5 -d primary_ip=10.0.0.2 -d all_ips[0]=10.0.0.2 -d all_ips[1]=10.0.0.3 -d secret=supersecret -X POST https://10.0.0.2/topology
+```
+*Response:*
+```
+OK
+```
+**Notes:** In an ACTIVE-STANDBY configuration, the 'role' parameter might
+change spontaneously due to a failure of one node. On other topologies, the
+role should not spontaneously change.
+
 ## Get appliance status
 
 * **URL:** /status
@@ -95,7 +150,7 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/status
 ```
 *Response:*
 ```
-{"network_tx":12245.6,"active_node":1,"network_rx":20521.8666666667,"haproxy_count":"2","hostname":"octavia-1.localnet","fencing_daemon_status":"OK","stunnel_count":"1","user_cpu":0.333333333333333,"system_cpu":0.233333333333333,"software_irq":0.0833333333333333,"load":["0.13","0.12","0.13"],"topology":"active-standby","role":"primary"}
+{"network_tx":12245.6,"active_node":1,"network_rx":20521.8666666667,"haproxy_count":"2","hostname":"octavia-1.localnet","fencing_daemon_status":"OK","stunnel_count":"1","user_cpu":0.333333333333333,"system_cpu":0.233333333333333,"software_irq":0.0833333333333333,"load":["0.13","0.12","0.13"],"topology":"ACTIVE-STANDBY","role":"PRIMARY","topology_status":"ACTIVE"}
 ```
 
 **Notes:** The data in this request is meant to provide intelligence for an
@@ -107,9 +162,9 @@ useful for making these decisions.
 The data in this request is also used by the controller for determining overall
 health of the load balancer, currently-configured topology and role, etc.
 
-## Get listeners' statuses
+## Get all listeners' statuses
 
-* **URL:** /listeners_status
+* **URL:** /listeners
 * **Method:** GET
 * **URL params:** none
 * **Data params:** none
@@ -120,38 +175,16 @@ health of the load balancer, currently-configured topology and role, etc.
     * none
 * **Sample Call:**
 ```
-curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/service_status
+curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/listeners
 ```
 *Response:*
 ```
 [{"stunnel":"running","status":"OK","type":"HTTPS","id":"7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c","haproxy":"running"},{"status":"DOWN","type":"TCP","id":"635bbdc6-65cd-41fc-b879-22c02aaf8951","haproxy":"stopped"}]
 ```
-* **Notes:**
+* **Notes:** Note that this returns a status if *any* files exist for the
+listener (not just if there is a valid haproxy or stunnel configuration).
 
-## List all listeners
-
-* **URL:** /listeners
-* **Method:** GET
-* **URL params:** none
-* **Data params:** none
-* **Success Response:**
-    * Code: 200     
-      Content: plain-text list of all listeners for which files exist on the
-      current host.
-* **Error Response:**
-    * none
-* **Sample Call:**
-```
-curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/listeners
-```
-*Response:*
-```
-7e9f91eb-b3e6-4e3b-a1a7-d6f7fdc1de7c
-635bbdc6-65cd-41fc-b879-22c02aaf8951
-```
-* **Notes:**
-
-## Check a listener's status
+## Get a listener's status
 
 * **URL:** /listeners/*:listener*
 * **Method:** GET
@@ -163,7 +196,7 @@ curl -H 'Expect:' -E client_cert.pem -k https://10.0.0.2/listeners
       Content: JSON-formatted listener status
 * **Error Response:**
     * Code: 404     
-      Content: Not Found
+      Content: Not Found      
       *none*
 * **Sample Call:**
 ```
@@ -496,7 +529,7 @@ actually stop the existing daemon to try running a new daemon using the new
 config. If this attempt fails, we attempt to roll back to the old config.
 There is the possibility that one of the certificate files may have been
 deleted (if other API commands were recived to do so) which may prevent a
-roll-back and leave the service in a 'down' state. This should be a very rare
+roll-back and leave the listener in a 'down' state. This should be a very rare
 occurence in any case.     
 .     
 The configuration uploaded is actually a template: Any occurrences of the string {MYIP} will be replaced with the appliance IP.
