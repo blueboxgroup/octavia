@@ -9,6 +9,8 @@
 - [Overview](#overview)
     - [lighttpd, curl and the 'Expect:' header](#lighttpd-curl-and-the-expect-header)
 - [API](#api)
+    - [Get appliance topology](#get-appliance-topology)
+    - [Set appliance topology](#set-appliance-topology)
     - [Get appliance status](#get-appliance-status)
     - [Get all listeners' statuses](#get-all-listeners-statuses)
     - [Get a listener's status](#get-a-listeners-status)
