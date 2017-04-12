@@ -14,4 +14,4 @@ This project consists of the glue scripts, configuration templates, and
 other data necessary both for building the virtual appliance image and
 control daemon.
 
-Further documentation can be found in /doc
+Further documentation can be found in /doc 
